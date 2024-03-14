@@ -1,6 +1,7 @@
 import enum
 import uuid
 from sqlalchemy import Column, Uuid, Time
+from datetime import datetime
 
 class CompanyMode(enum.Enum):
     PUBLIC = 'PUB'
@@ -19,5 +20,5 @@ class Priority(enum.Enum):
 
 class BaseEntity:
     id = Column(Uuid, primary_key=True, default=uuid.uuid4)
-    created_at = Column(Time, nullable=False)
-    updated_at = Column(Time, nullable=False)
+    created_at = Column(Time, nullable=False, default=datetime.now())
+    updated_at = Column(Time, nullable=True)
