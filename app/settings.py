@@ -13,3 +13,5 @@ def get_connect_string():
     return f"{engine}://{username}:{password}@{dbhost}:{port}/{dbname}"
 
 SQLALCHEMY_DATABASE_URL= get_connect_string()
+JWT_SECRET = os.environ.get("JWT_SECRET")
+JWT_ALGORITHM = os.environ.get("JWT_ALGORITHM")

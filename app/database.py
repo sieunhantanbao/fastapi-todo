@@ -1,5 +1,5 @@
 from settings import SQLALCHEMY_DATABASE_URL
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -12,8 +12,6 @@ def get_db_context():
 
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
-
-metadata = MetaData().create_all(engine)
  
 LocalSession = sessionmaker(autoflush=False, autocommit=False, bind=engine)
 
