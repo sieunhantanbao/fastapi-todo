@@ -8,20 +8,9 @@ from datetime import datetime
 from fastapi import status
 import logging
 
-def get_all_users(db:Session) -> list[UserViewModel]:
-    """ Get all users
-
-    Args:
-        db (Session): Db context
-
-    Returns:
-        list[UserViewModel]: List of users to return
-    """
-    return db.query(User).all()
-
 def get_user_by_id(id:UUID, db:Session) -> UserViewModel:
     """ Get a user by Id
-
+    
     Args:
         id (UUID): User Id to get
         db (Session): Db context
@@ -29,7 +18,7 @@ def get_user_by_id(id:UUID, db:Session) -> UserViewModel:
     Returns:
         UserViewModel: A single user object to return
     """
-    return db.query(User).filter(User.id==id).first()
+    return db.query(User).filter(User.id==id, User.is_active==True).first()
 
 def get_users_by_company_id(company_id, db: Session) -> list[UserViewModel]:
     """ Get all users by company Id
@@ -41,7 +30,7 @@ def get_users_by_company_id(company_id, db: Session) -> list[UserViewModel]:
     Returns:
         list[UserViewModel]: A list of user model to return
     """
-    return db.query(User).filter(User.company_id==company_id).all()
+    return db.query(User).filter(User.company_id==company_id, User.is_active==True).all()
 
 def create_or_update_user(db: Session, model: UserCreateOrUpdateModel, id: UUID = None) -> status:
     """ Create or update user
@@ -111,20 +100,21 @@ def create_or_update_user(db: Session, model: UserCreateOrUpdateModel, id: UUID 
         return status.HTTP_500_INTERNAL_SERVER_ERROR
     
 def delete_a_user(id: UUID, db: Session) -> status:
-    """ Delete a user
+    """ Soft delete a user by set the is_active = False
 
     Args:
-        id (UUID): User Id to delete
+        id (UUID): Id of the user to delete
         db (Session): Db context
 
     Returns:
-        bool: True if sucess else False
+        status: 404 Not found/ 204 No content
     """
     user_to_delete = db.query(User).filter(User.id==id).first()
     if not user_to_delete:
         logging.error("The user does not exist to delete")
         return status.HTTP_404_NOT_FOUND
-    db.delete(user_to_delete)
+    user_to_delete.is_active = False
+    db.add(user_to_delete)
     db.commit()
     return status.HTTP_204_NO_CONTENT
         
