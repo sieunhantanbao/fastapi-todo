@@ -1,7 +1,7 @@
 from datetime import datetime
 from models.company import CompapnyViewModel, CompanyCreateOrUpdateModel
 from sqlalchemy.orm import Session
-from fastapi import Depends, status
+from fastapi import status
 from schemas.company import Company
 from uuid import UUID
 import logging
