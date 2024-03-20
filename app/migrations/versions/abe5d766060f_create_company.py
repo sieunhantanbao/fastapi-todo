@@ -30,7 +30,7 @@ def upgrade() -> None:
                     sa.Column('description', sa.String, nullable=True),
                     sa.Column('mode', sa.Enum(CompanyMode), nullable=True, default=CompanyMode.PUBLIC),
                     sa.Column('rating', sa.Float, nullable=True),
-                    sa.Column('created_at', sa.DateTime, nullable=False, default=datetime.utcnow),
+                    sa.Column('created_at', sa.DateTime, nullable=False, default=datetime.now()),
                     sa.Column('updated_at', sa.DateTime, nullable=True)
                     )
     
